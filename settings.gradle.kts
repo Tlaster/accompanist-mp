@@ -24,3 +24,4 @@ rootProject.name = "accompanist-mp"
 
 include(":safearea")
 include(":mediaquery")
+include(":dialog")
