@@ -19,5 +19,9 @@ gradlePlugin {
             id = "accompanist-mp-plugin"
             implementationClass = "moe.tlaster.accompanist.plugin.AccompanistMultiplatformPlugin"
         }
+        register("accompanist-sample-plugin") {
+            id = "accompanist-sample-plugin"
+            implementationClass = "moe.tlaster.accompanist.plugin.AccompanistSamplePlugin"
+        }
     }
 }

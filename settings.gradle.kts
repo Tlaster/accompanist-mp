@@ -25,3 +25,6 @@ rootProject.name = "accompanist-mp"
 include(":safearea")
 include(":mediaquery")
 include(":dialog")
+include(":dialog:sample")
+
+enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
