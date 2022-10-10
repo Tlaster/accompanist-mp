@@ -9,12 +9,14 @@ import org.gradle.api.publish.PublishingExtension
 import org.gradle.api.publish.maven.MavenPublication
 import org.gradle.api.tasks.TaskProvider
 import org.gradle.api.tasks.bundling.Jar
+import org.gradle.kotlin.dsl.dependencies
 import org.gradle.kotlin.dsl.findByType
 import org.gradle.kotlin.dsl.provideDelegate
 import org.gradle.kotlin.dsl.registering
 import org.gradle.kotlin.dsl.withType
 import org.gradle.plugins.signing.SigningExtension
 import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
+import org.jetbrains.kotlin.gradle.dsl.kotlinExtension
 
 class AccompanistMultiplatformPlugin : Plugin<Project> {
     private val Project.ext get() = extensions.findByType<ExtraPropertiesExtension>()!!
@@ -80,9 +82,9 @@ class AccompanistMultiplatformPlugin : Plugin<Project> {
                 }
             }
             val javadocJar: TaskProvider<Jar> =
-                    tasks.register("javadocJar", org.gradle.api.tasks.bundling.Jar::class.java) {
-                        archiveClassifier.set("javadoc")
-                    }
+                tasks.register("javadocJar", org.gradle.api.tasks.bundling.Jar::class.java) {
+                    archiveClassifier.set("javadoc")
+                }
             publications.withType<MavenPublication>() {
                 artifact(javadocJar)
                 pom {
