@@ -4,7 +4,7 @@ import org.jetbrains.kotlin.gradle.plugin.mpp.KotlinNativeTarget
 plugins {
     kotlin("multiplatform")
     id("org.jetbrains.compose") version Versions.compose_jb
-    id("com.android.application")
+//    id("com.android.application")
 }
 
 kotlin {
@@ -15,18 +15,18 @@ kotlin {
                 freeCompilerArgs += listOf(
                     "-linker-option", "-framework", "-linker-option", "Metal",
                     "-linker-option", "-framework", "-linker-option", "CoreText",
-                    "-linker-option", "-framework", "-linker-option", "CoreGraphics",
+                    "-linker-option", "-framework", "-linker-option", "CoreGraphics"
                 )
             }
         }
     }
-    android()
+//    android()
     macosX64 {
         binaries {
             executable {
                 entryPoint = "moe.tlaster.accompanist.sample.main"
                 freeCompilerArgs += listOf(
-                    "-linker-option", "-framework", "-linker-option", "Metal",
+                    "-linker-option", "-framework", "-linker-option", "Metal"
                 )
             }
         }
@@ -36,7 +36,7 @@ kotlin {
             executable {
                 entryPoint = "moe.tlaster.accompanist.sample.main"
                 freeCompilerArgs += listOf(
-                    "-linker-option", "-framework", "-linker-option", "Metal",
+                    "-linker-option", "-framework", "-linker-option", "Metal"
                 )
             }
         }
@@ -63,12 +63,12 @@ kotlin {
                 implementation(compose.desktop.currentOs)
             }
         }
-        val androidMain by getting {
-            dependencies {
-                implementation("androidx.activity:activity-ktx:1.6.0")
-                implementation("androidx.activity:activity-compose:1.6.0")
-            }
-        }
+//        val androidMain by getting {
+//            dependencies {
+//                implementation("androidx.activity:activity-ktx:1.6.0")
+//                implementation("androidx.activity:activity-compose:1.6.0")
+//            }
+//        }
         val darwinMain by creating {
             dependsOn(commonMain)
             dependencies {
@@ -151,29 +151,29 @@ compose {
     }
 }
 
-android {
-    compileSdk = Versions.Android.compile
-    buildToolsVersion = Versions.Android.buildTools
-    namespace = "moe.tlaster.accompanist.sample"
-    defaultConfig {
-        applicationId = "moe.tlaster.accompanist.sample"
-        minSdk = Versions.Android.min
-        targetSdk = Versions.Android.target
-        versionCode = 1
-        versionName = "0.1.0"
-    }
-    sourceSets {
-        getByName("main") {
-            manifest.srcFile("src/androidMain/AndroidManifest.xml")
-        }
-    }
-    buildTypes {
-        getByName("release") {
-            isMinifyEnabled = false
-        }
-    }
-    compileOptions {
-        sourceCompatibility = Versions.Java.java
-        targetCompatibility = Versions.Java.java
-    }
-}
+//android {
+//    compileSdk = Versions.Android.compile
+//    buildToolsVersion = Versions.Android.buildTools
+//    namespace = "moe.tlaster.accompanist.sample"
+//    defaultConfig {
+//        applicationId = "moe.tlaster.accompanist.sample"
+//        minSdk = Versions.Android.min
+//        targetSdk = Versions.Android.target
+//        versionCode = 1
+//        versionName = "0.1.0"
+//    }
+//    sourceSets {
+//        getByName("main") {
+//            manifest.srcFile("src/androidMain/AndroidManifest.xml")
+//        }
+//    }
+//    buildTypes {
+//        getByName("release") {
+//            isMinifyEnabled = false
+//        }
+//    }
+//    compileOptions {
+//        sourceCompatibility = Versions.Java.java
+//        targetCompatibility = Versions.Java.java
+//    }
+//}
