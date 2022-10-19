@@ -16,6 +16,6 @@ object Versions {
     const val spotless = "6.9.1"
     const val ktlint = "0.46.1"
     const val compose = "1.2.1"
-    const val compose_jb = "1.2.0-alpha01-dev778"
+    const val compose_jb = "1.2.0"
     const val compose_material3 = "1.0.0-beta03"
 }
