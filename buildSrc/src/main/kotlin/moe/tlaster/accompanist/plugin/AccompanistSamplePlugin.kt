@@ -1,30 +1,24 @@
 package moe.tlaster.accompanist.plugin
 
 import Versions
-import com.android.build.gradle.internal.dsl.BaseAppModuleExtension
 import org.gradle.api.Plugin
 import org.gradle.api.Project
-import org.gradle.kotlin.dsl.configure
-import org.gradle.kotlin.dsl.findByType
+import org.gradle.kotlin.dsl.create
 import org.gradle.kotlin.dsl.get
-import org.jetbrains.compose.ComposeExtension
-import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
-import org.jetbrains.kotlin.gradle.plugin.mpp.KotlinNativeTarget
-import org.jetbrains.compose.desktop.DesktopExtension
 import org.jetbrains.compose.desktop.application.dsl.TargetFormat
-import org.jetbrains.compose.experimental.dsl.ExperimentalExtension
-import org.jetbrains.kotlin.gradle.dsl.KotlinJvmProjectExtension
-import org.jetbrains.kotlin.gradle.plugin.mpp.pm20.targets
+import org.jetbrains.kotlin.gradle.plugin.mpp.KotlinNativeTarget
 
 class AccompanistSamplePlugin : Plugin<Project> {
 
-    override fun apply(target: Project) {
-        with(target) {
-            val extension = extensions.create("sample", AccompanistSampleExtension::class.java)
+    private lateinit var sampleExtension: AccompanistSampleExtension
+
+    override fun apply(project: Project) {
+        with(project) {
+            sampleExtension = extensions.create<AccompanistSampleExtension>("sample")
             applyPlugins()
-            kmpConfig(extension)
-            androidConfig(extension)
-            composeConfig(extension)
+            kmpConfig()
+            androidConfig()
+            composeConfig()
         }
     }
 
@@ -37,25 +31,22 @@ class AccompanistSamplePlugin : Plugin<Project> {
         }
     }
 
-    private fun Project.kmpConfig(extension: AccompanistSampleExtension) {
-        extensions.configure<KotlinMultiplatformExtension> {
+    private fun Project.kmpConfig() {
+        kotlin {
             android()
             jvm {
                 compilations.all {
                     kotlinOptions.jvmTarget = Versions.Java.jvmTarget
                 }
-                // testRuns.getByName("test").executionTask.configure {
-                //     useJUnitPlatform()
-                // }
             }
             ios("uikit") {
-                configureIosTarget(extension.entryPoint)
+                configureIosTarget(sampleExtension.entryPoint)
             }
             macosX64() {
-                configureMacosTarget(extension.entryPoint)
+                configureMacosTarget(sampleExtension.entryPoint)
             }
             macosArm64() {
-                configureMacosTarget(extension.entryPoint)
+                configureMacosTarget(sampleExtension.entryPoint)
             }
 
             sourceSets.apply {
@@ -82,12 +73,12 @@ class AccompanistSamplePlugin : Plugin<Project> {
         }
     }
 
-    private fun Project.androidConfig(extension: AccompanistSampleExtension) {
-        extensions.configure<BaseAppModuleExtension> {
+    private fun Project.androidConfig() {
+        android {
             compileSdk = Versions.Android.compile
             buildToolsVersion = Versions.Android.buildTools
             defaultConfig {
-                applicationId = extension.applicationId
+                applicationId = sampleExtension.applicationId
                 minSdk = Versions.Android.min
                 targetSdk = Versions.Android.target
                 versionCode = 1
@@ -102,19 +93,19 @@ class AccompanistSamplePlugin : Plugin<Project> {
         }
     }
 
-    private fun Project.composeConfig(extension: AccompanistSampleExtension) {
-        extensions.configure<ComposeExtension> {
-            this.extensions.configure<DesktopExtension> {
+    private fun Project.composeConfig() {
+        compose {
+            desktop {
                 application {
-                    mainClass = extension.desktopMainClass
+                    mainClass = sampleExtension.desktopMainClass
                     nativeDistributions {
                         targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb)
-                        packageName = extension.packageName
-                        packageVersion = extension.packageVersion
+                        packageName = sampleExtension.packageName
+                        packageVersion = sampleExtension.packageVersion
                         modules("jdk.unsupported")
                         modules("jdk.unsupported.desktop")
                         macOS {
-                            bundleID = extension.applicationId
+                            bundleID = sampleExtension.applicationId
                         }
                     }
                 }
@@ -125,28 +116,25 @@ class AccompanistSamplePlugin : Plugin<Project> {
                     )
                     distributions {
                         targetFormats(TargetFormat.Dmg)
-                        packageName = extension.packageName
-                        packageVersion = extension.packageVersion
+                        packageName = sampleExtension.packageName
+                        packageVersion = sampleExtension.packageVersion
                     }
                 }
             }
-            this.extensions.configure<ExperimentalExtension> {
+            experimental {
                 uikit.application {
-                    bundleIdPrefix = extension.applicationId
-                    projectName = extension.packageName
+                    bundleIdPrefix = sampleExtension.applicationId
+                    projectName = sampleExtension.packageName
                     deployConfigurations {
                         simulator("Simulator") {
-                            device = org.jetbrains.compose.experimental.dsl.IOSDevices.IPHONE_13_MINI
+                            device =
+                                org.jetbrains.compose.experimental.dsl.IOSDevices.IPHONE_13_MINI
                         }
                     }
                 }
             }
         }
     }
-
-    private val Project.kotlin get() = extensions.findByType<KotlinMultiplatformExtension>()!!
-    private val Project.compose get() = (kotlin as org.gradle.api.plugins.ExtensionAware)
-        .extensions.getByName("compose") as org.jetbrains.compose.ComposePlugin.Dependencies
 }
 
 private fun KotlinNativeTarget.configureIosTarget(entryPoint: String) {
@@ -154,9 +142,18 @@ private fun KotlinNativeTarget.configureIosTarget(entryPoint: String) {
         executable {
             entryPoint(entryPoint)
             freeCompilerArgs += listOf(
-                "-linker-option", "-framework", "-linker-option", "Metal",
-                "-linker-option", "-framework", "-linker-option", "CoreText",
-                "-linker-option", "-framework", "-linker-option", "CoreGraphics"
+                "-linker-option",
+                "-framework",
+                "-linker-option",
+                "Metal",
+                "-linker-option",
+                "-framework",
+                "-linker-option",
+                "CoreText",
+                "-linker-option",
+                "-framework",
+                "-linker-option",
+                "CoreGraphics"
             )
             freeCompilerArgs += "-Xdisable-phases=VerifyBitcode"
             binaryOptions["memoryModel"] = "experimental"
