@@ -19,7 +19,12 @@ allprojects {
         kotlin {
             target("**/*.kt")
             targetExclude("$buildDir/**/*.kt", "bin/**/*.kt", "buildSrc/**/*.kt")
-            ktlint(Versions.ktlint)
+            ktlint(Versions.ktlint).editorConfigOverride(
+                mapOf(
+                    // rules: https://github.com/pinterest/ktlint/blob/master/README.md#standard-rules
+                    "disabled_rules" to "filename,enum-entry-name-case,trailing-comma"
+                )
+            )
         }
         kotlinGradle {
             target("*.gradle.kts")

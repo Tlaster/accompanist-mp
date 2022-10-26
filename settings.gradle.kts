@@ -27,5 +27,6 @@ include(":mediaquery")
 include(":dialog")
 include(":dialog:sample")
 include(":operatingsystem")
+include(":sample")
 
 enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")

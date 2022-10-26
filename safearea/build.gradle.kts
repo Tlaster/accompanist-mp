@@ -1,5 +1,3 @@
-import org.jetbrains.compose.compose
-
 plugins {
     id("accompanist-mp-plugin")
 }
