@@ -120,7 +120,7 @@ class AccompanistMultiplatformPlugin : Plugin<Project> {
 
 
     private fun Project.androidConfig() {
-        android {
+        library {
             compileSdk = Versions.Android.compile
             buildToolsVersion = Versions.Android.buildTools
             namespace = findProperty("ANDROID_NAMESPACE") as String
