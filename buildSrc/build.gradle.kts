@@ -1,7 +1,6 @@
 plugins {
     `kotlin-dsl`
     `kotlin-dsl-precompiled-script-plugins`
-    // id("org.jetbrains.compose").version("1.2.0").apply(false)
 }
 
 repositories {
@@ -10,9 +9,9 @@ repositories {
 }
 
 dependencies {
-    implementation("com.android.tools.build:gradle:7.2.2")
+    implementation("com.android.tools.build:gradle:7.3.1")
     implementation("org.jetbrains.compose:compose-gradle-plugin:1.2.0")
-    api(kotlin("gradle-plugin", version = "1.7.10"))
+    implementation(kotlin("gradle-plugin", version = "1.7.20"))
 }
 
 gradlePlugin {

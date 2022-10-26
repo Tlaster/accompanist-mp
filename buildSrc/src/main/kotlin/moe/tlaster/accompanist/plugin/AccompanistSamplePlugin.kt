@@ -10,11 +10,8 @@ import org.jetbrains.kotlin.gradle.plugin.mpp.KotlinNativeTarget
 
 class AccompanistSamplePlugin : Plugin<Project> {
 
-    private lateinit var sampleExtension: AccompanistSampleExtension
-
     override fun apply(project: Project) {
         with(project) {
-            sampleExtension = extensions.create<AccompanistSampleExtension>("sample")
             applyPlugins()
             kmpConfig()
             androidConfig()
@@ -40,13 +37,13 @@ class AccompanistSamplePlugin : Plugin<Project> {
                 }
             }
             ios("uikit") {
-                configureIosTarget(sampleExtension.entryPoint)
+                configureIosTarget(findProperty("entryPoint") as String)
             }
             macosX64() {
-                configureMacosTarget(sampleExtension.entryPoint)
+                configureMacosTarget(findProperty("entryPoint") as String)
             }
             macosArm64() {
-                configureMacosTarget(sampleExtension.entryPoint)
+                configureMacosTarget(findProperty("entryPoint") as String)
             }
 
             sourceSets.apply {
@@ -78,7 +75,7 @@ class AccompanistSamplePlugin : Plugin<Project> {
             compileSdk = Versions.Android.compile
             buildToolsVersion = Versions.Android.buildTools
             defaultConfig {
-                applicationId = sampleExtension.applicationId
+                applicationId = findProperty("applicationId") as String
                 minSdk = Versions.Android.min
                 targetSdk = Versions.Android.target
                 versionCode = 1
@@ -97,15 +94,15 @@ class AccompanistSamplePlugin : Plugin<Project> {
         compose {
             desktop {
                 application {
-                    mainClass = sampleExtension.desktopMainClass
+                    mainClass = findProperty("desktopMainClass") as String
                     nativeDistributions {
                         targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb)
-                        packageName = sampleExtension.packageName
-                        packageVersion = sampleExtension.packageVersion
+                        packageName = findProperty("packageName") as String
+                        packageVersion = findProperty("packageVersion") as String
                         modules("jdk.unsupported")
                         modules("jdk.unsupported.desktop")
                         macOS {
-                            bundleID = sampleExtension.applicationId
+                            bundleID = findProperty("applicationId") as String
                         }
                     }
                 }
@@ -116,15 +113,15 @@ class AccompanistSamplePlugin : Plugin<Project> {
                     )
                     distributions {
                         targetFormats(TargetFormat.Dmg)
-                        packageName = sampleExtension.packageName
-                        packageVersion = sampleExtension.packageVersion
+                        packageName = findProperty("packageName") as String
+                        packageVersion = findProperty("packageVersion") as String
                     }
                 }
             }
             experimental {
                 uikit.application {
-                    bundleIdPrefix = sampleExtension.applicationId
-                    projectName = sampleExtension.packageName
+                    bundleIdPrefix = findProperty("applicationId") as String
+                    projectName = findProperty("packageName") as String
                     deployConfigurations {
                         simulator("Simulator") {
                             device =
@@ -134,6 +131,10 @@ class AccompanistSamplePlugin : Plugin<Project> {
                 }
             }
         }
+    }
+
+    private fun Project.applyConfig() {
+
     }
 }
 
@@ -172,12 +173,4 @@ private fun KotlinNativeTarget.configureMacosTarget(entryPoint: String) {
             binaryOptions["memoryModel"] = "experimental"
         }
     }
-}
-
-open class AccompanistSampleExtension {
-    var packageName = ""
-    var packageVersion = "1.0.0"
-    var applicationId: String = ""
-    var desktopMainClass = ""
-    var entryPoint: String = ""
 }

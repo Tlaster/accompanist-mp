@@ -4,6 +4,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.DrawerDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -33,15 +34,22 @@ fun ProvideDialogHost(
     content: @Composable () -> Unit
 ) {
     Box(modifier) {
-        val dialogHost = remember {
-            ContentHolder()
-        }
-        CompositionLocalProvider(
-            LocalDialogHost provides dialogHost,
-            content = content,
-        )
-        dialogHost.content?.invoke()
+        ProvideDialogHostInner(content)
     }
+}
+
+@Composable
+fun BoxScope.ProvideDialogHostInner(
+    content: @Composable () -> Unit
+) {
+    val dialogHost = remember {
+        ContentHolder()
+    }
+    CompositionLocalProvider(
+        LocalDialogHost provides dialogHost,
+        content = content,
+    )
+    dialogHost.content?.invoke()
 }
 
 @OptIn(ExperimentalMaterial3Api::class)

@@ -7,8 +7,8 @@ kotlin {
         val commonMain by getting {
             dependencies {
                 api(compose.foundation)
-                @OptIn(org.jetbrains.compose.ExperimentalComposeLibrary::class)
-                api(compose.material3)
+                api(compose.material)
+                api("io.github.qdsfdhvh:material3:1.0.7")
             }
         }
         val commonTest by getting {
@@ -17,19 +17,13 @@ kotlin {
         }
         val androidMain by getting {
             dependencies {
-                implementation("androidx.compose.ui:ui:${Versions.compose}")
-                implementation("androidx.compose.foundation:foundation:${Versions.compose}")
-                implementation("androidx.compose.material3:material3:${Versions.compose_material3}")
+                compileOnly("androidx.compose.material3:material3:1.0.0-rc01")
             }
         }
-        val material3Main by creating {
-            dependsOn(commonMain)
-        }
         val jvmMain by getting {
-            dependsOn(material3Main)
         }
         val darwinMain by creating {
-            dependsOn(material3Main)
+            dependsOn(commonMain)
         }
         val uikitMain by getting {
             dependsOn(darwinMain)
