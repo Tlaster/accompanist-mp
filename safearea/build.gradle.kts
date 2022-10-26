@@ -24,7 +24,7 @@ kotlin {
         val jvmMain by getting {
             dependsOn(desktopMain)
         }
-        val macosMain by creating {
+        val macosMain by getting {
             dependsOn(desktopMain)
         }
         val macosX64Main by getting {

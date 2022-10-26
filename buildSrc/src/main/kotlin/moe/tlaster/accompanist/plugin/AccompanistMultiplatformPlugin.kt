@@ -101,9 +101,6 @@ class AccompanistMultiplatformPlugin : Plugin<Project> {
 
     private fun Project.kmpConfig() {
         kotlin {
-            macosX64()
-            macosArm64()
-            ios("uikit")
             android {
                 publishLibraryVariants("release", "debug")
             }
@@ -113,6 +110,21 @@ class AccompanistMultiplatformPlugin : Plugin<Project> {
                 }
                 testRuns.getByName("test").executionTask.configure {
                     useJUnitPlatform()
+                }
+            }
+            ios("uikit")
+            macosX64()
+            macosArm64()
+
+            sourceSets.apply {
+                val commonMain = getByName("commonMain")
+                val macosMain = maybeCreate("macosMain")
+                macosMain.dependsOn(commonMain)
+                getByName("macosX64Main") {
+                    dependsOn(macosMain)
+                }
+                getByName("macosArm64Main") {
+                    dependsOn(macosMain)
                 }
             }
         }
