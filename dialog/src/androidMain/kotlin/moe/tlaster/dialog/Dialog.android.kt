@@ -7,14 +7,12 @@ import androidx.compose.ui.window.Dialog
 actual fun DialogImpl(
     onDismissRequest: () -> Unit,
     properties: DialogProperties,
-    content: @Composable DialogWindowScope.() -> Unit
+    content: @Composable () -> Unit
 ) {
     Dialog(
         onDismissRequest = onDismissRequest,
         properties = properties,
-        content = {
-            content.invoke(DialogWindowScope)
-        }
+        content = content,
     )
 }
 
@@ -27,7 +25,3 @@ actual fun DialogProperties(
     dismissOnBackPress = dismissOnBackPress,
     dismissOnClickOutside = dismissOnClickOutside,
 )
-
-actual interface DialogWindowScope {
-    companion object : DialogWindowScope
-}

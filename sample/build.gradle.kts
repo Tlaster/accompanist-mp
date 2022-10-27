@@ -3,7 +3,7 @@ import org.jetbrains.kotlin.gradle.plugin.mpp.KotlinNativeTarget
 
 plugins {
     kotlin("multiplatform")
-    id("org.jetbrains.compose") version Versions.compose_jb
+    id("org.jetbrains.compose")
 //    id("com.android.application")
 }
 

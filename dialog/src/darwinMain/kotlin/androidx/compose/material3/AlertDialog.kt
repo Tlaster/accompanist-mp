@@ -27,7 +27,6 @@ import androidx.compose.ui.semantics.paneTitle
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import moe.tlaster.dialog.Dialog
 
 /**
  * <a href="https://m3.material.io/components/dialogs/overview" class="external" target="_blank">Material Design basic dialog</a>.
@@ -86,39 +85,40 @@ fun AlertDialog(
     titleContentColor: Color = AlertDialogDefaults.titleContentColor,
     textContentColor: Color = AlertDialogDefaults.textContentColor,
     tonalElevation: Dp = AlertDialogDefaults.TonalElevation,
+    dialogProvider: AlertDialogProvider = Material3PopupAlertDialogProvider,
 ) {
-    Dialog(
-        onDismissRequest = onDismissRequest,
-    ) {
-        val dialogPaneDescription = getString(Strings.Dialog)
-        AlertDialogContent(
-            buttons = {
-                AlertDialogFlowRow(
-                    mainAxisSpacing = ButtonsMainAxisSpacing,
-                    crossAxisSpacing = ButtonsCrossAxisSpacing
-                ) {
-                    dismissButton?.invoke()
-                    confirmButton()
-                }
-            },
-            modifier = modifier.then(Modifier
-                .semantics { paneTitle = dialogPaneDescription }
-            ),
-            icon = icon,
-            title = title,
-            text = text,
-            shape = shape,
-            containerColor = containerColor,
-            tonalElevation = tonalElevation,
-            // Note that a button content color is provided here from the dialog's token, but in
-            // most cases, TextButtons should be used for dismiss and confirm buttons.
-            // TextButtons will not consume this provided content color value, and will used their
-            // own defined or default colors.
-            buttonContentColor = DialogTokens.ActionLabelTextColor.toColor(),
-            iconContentColor = iconContentColor,
-            titleContentColor = titleContentColor,
-            textContentColor = textContentColor,
-        )
+    with(dialogProvider) {
+        AlertDialog(onDismissRequest = onDismissRequest) {
+            val dialogPaneDescription = getString(Strings.Dialog)
+            AlertDialogContent(
+                buttons = {
+                    AlertDialogFlowRow(
+                        mainAxisSpacing = ButtonsMainAxisSpacing,
+                        crossAxisSpacing = ButtonsCrossAxisSpacing
+                    ) {
+                        dismissButton?.invoke()
+                        confirmButton()
+                    }
+                },
+                modifier = modifier.then(Modifier
+                    .semantics { paneTitle = dialogPaneDescription }
+                ),
+                icon = icon,
+                title = title,
+                text = text,
+                shape = shape,
+                containerColor = containerColor,
+                tonalElevation = tonalElevation,
+                // Note that a button content color is provided here from the dialog's token, but in
+                // most cases, TextButtons should be used for dismiss and confirm buttons.
+                // TextButtons will not consume this provided content color value, and will used their
+                // own defined or default colors.
+                buttonContentColor = DialogTokens.ActionLabelTextColor.toColor(),
+                iconContentColor = iconContentColor,
+                titleContentColor = titleContentColor,
+                textContentColor = textContentColor,
+            )
+        }
     }
 }
 
