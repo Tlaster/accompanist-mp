@@ -9,8 +9,9 @@ repositories {
 }
 
 dependencies {
-    implementation("com.android.tools.build:gradle:7.2.2")
-    api(kotlin("gradle-plugin", version = "1.7.10"))
+    implementation("com.android.tools.build:gradle:7.3.1")
+    implementation("org.jetbrains.compose:compose-gradle-plugin:1.2.0")
+    implementation(kotlin("gradle-plugin", version = "1.7.20"))
 }
 
 gradlePlugin {
@@ -18,6 +19,10 @@ gradlePlugin {
         register("accompanist-mp-plugin") {
             id = "accompanist-mp-plugin"
             implementationClass = "moe.tlaster.accompanist.plugin.AccompanistMultiplatformPlugin"
+        }
+        register("accompanist-sample-plugin") {
+            id = "accompanist-sample-plugin"
+            implementationClass = "moe.tlaster.accompanist.plugin.AccompanistSamplePlugin"
         }
     }
 }
